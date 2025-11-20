@@ -1,0 +1,32 @@
+# .NET Core
+bin/
+obj/
+*.user
+*.suo
+*.sln.docstates
+!.gitignore
+
+# User-specific files
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa]rchive/
+[Oo]ut/
+[Ll]og/
+
+# Build Results
+**/bin/
+**/obj/
+
+# SQLite DB (temp/local data)
+*.db
+
+# VS Code
+.vscode/settings.json
+.vscode/launch.json
+
+# macOS
+.DS_Store
