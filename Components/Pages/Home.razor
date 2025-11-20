@@ -11,61 +11,112 @@
 
 <h1>Todo List</h1>
 
-<EditForm Model="@newTodo" OnValidSubmit="@AddTodo" formname="AddTodoForm">
-    <DataAnnotationsValidator /> <!-- Optional: Adds basic validation if you add [Required] to Title later -->
-    <ValidationSummary /> <!-- Optional: Shows errors if validation fails -->
-    <InputText @bind-Value="newTodo.Title" placeholder="New todo title" class="form-control mb-2" />
-    <button type="submit" class="btn btn-primary">Add</button>
+<EditForm Model="@currentTodo" OnValidSubmit="@HandleSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <InputText @bind-Value="currentTodo.Title" placeholder="Todo title" class="form-control mb-2" />
+    <button type="submit" class="btn btn-primary">
+        @(editing ? "Update" : "Add")
+    </button>
+    @if (editing)
+    {
+        <button type="button" @onclick="CancelEdit" class="btn btn-secondary ms-2">Cancel</button>
+    }
 </EditForm>
 
 @if (todos.Any())
 {
-    <ul>
-    @foreach (var todo in todos)
+    <ul class="mt-3">
+        @foreach (var todo in todos)
         {
-            <li>
-                <InputCheckbox @bind-Value="todo.IsCompleted" />
-                <span class="@(todo.IsCompleted ? "completed" : "")">@todo.Title</span>
-                <button @onclick="() => DeleteTodo(todo.Id)">Delete</button>
+            <li class="d-flex align-items-center gap-2 p-2 border mb-2">
+                <InputCheckbox @bind-Value="todo.IsCompleted" @onchange="() => StateHasChanged()" />
+                <span class="@(todo.IsCompleted ? "completed" : "") flex-grow-1">@todo.Title</span>
+                <button type="button" @onclick="() => StartEdit(todo)" class="btn btn-sm btn-outline-primary">Edit</button>
+                <button type="button" @onclick="() => DeleteTodo(todo.Id)" class="btn btn-sm btn-outline-danger">Delete</button>
             </li>
         }
     </ul>
 }
 else
 {
-    <p>No todos yet—add one above!</p>
+    <p class="mt-3">No todos yet—add one above!</p>
 }
 
 @code {
     private List<TodoItem> todos = new();
-    private TodoItem newTodo = new() { IsCompleted = false }; // Initialize fully
+    private TodoItem currentTodo = new() { IsCompleted = false };
+    private bool editing = false;
+    private int? editingId = null;
 
     protected override async Task OnInitializedAsync()
     {
         todos = await Db.TodoItems.ToListAsync();
     }
 
-    private async Task AddTodo()
+    private async Task HandleSubmit()
     {
-        if (!string.IsNullOrWhiteSpace(newTodo.Title))
+        if (!string.IsNullOrWhiteSpace(currentTodo.Title))
         {
             try
             {
-                Db.TodoItems.Add(newTodo);
-                await Db.SaveChangesAsync();
-                todos = await Db.TodoItems.ToListAsync();
-                newTodo = new() { IsCompleted = false };
-                StateHasChanged();
+                if (editing)
+                {
+                    // Update existing
+                    var existing = await Db.TodoItems.FindAsync(editingId);
+                    if (existing != null)
+                    {
+                        existing.Title = currentTodo.Title;
+                        existing.IsCompleted = currentTodo.IsCompleted;
+                        await Db.SaveChangesAsync();
+                    }
+                }
+                else
+                {
+                    // Add new
+                    Db.TodoItems.Add(currentTodo);
+                    await Db.SaveChangesAsync();
+                }
+
+                await RefreshTodos();
+                ResetForm();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in AddTodo: {ex.Message}"); // ← Add: Catch silent fails
+                // Log or handle error (e.g., await JS.InvokeVoidAsync("console.log", $"Error: {ex.Message}"); )
             }
         }
-        else
+    }
+
+    private Task StartEdit(TodoItem todo)
+    {
+        currentTodo = new TodoItem
         {
-            await JS.InvokeVoidAsync("alert", "Title cannot be empty!");
-        }
+            Id = todo.Id,
+            Title = todo.Title,
+            IsCompleted = todo.IsCompleted
+        };
+        editing = true;
+        editingId = todo.Id;
+        StateHasChanged();
+    }
+
+    private void CancelEdit()
+    {
+        ResetForm();
+    }
+
+    private void ResetForm()
+    {
+        currentTodo = new() { IsCompleted = false };
+        editing = false;
+        editingId = null;
+        StateHasChanged();
+    }
+
+    private async Task RefreshTodos()
+    {
+        todos = await Db.TodoItems.ToListAsync();
     }
 
     private async Task DeleteTodo(int id)
@@ -75,8 +126,7 @@ else
         {
             Db.TodoItems.Remove(todo);
             await Db.SaveChangesAsync();
-            todos = await Db.TodoItems.ToListAsync();
-            StateHasChanged();
+            await RefreshTodos();
         }
     }
 }

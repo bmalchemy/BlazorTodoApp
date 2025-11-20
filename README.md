@@ -8,6 +8,7 @@ This is a simple, full-stack CRUD (Create, Read, Update, Delete) application bui
 
 Key Features:
 - Interactive form for adding new todos.
+- Inline editing with form population and EF updates.
 - Real-time list with checkboxes for completion status.
 - Delete functionality.
 - Server-side rendering for seamless UI updates via `StateHasChanged()`.
