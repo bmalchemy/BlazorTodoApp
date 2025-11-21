@@ -44,7 +44,7 @@ else
 }
 
 @code {
-    private List<TodoItem> todos = new();
+    internal List<TodoItem> todos = new();
     private TodoItem currentTodo = new() { IsCompleted = false };
     private bool editing = false;
     private int? editingId = null;
@@ -52,6 +52,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         todos = await Db.TodoItems.ToListAsync();
+        Console.WriteLine($"Loaded {todos.Count} todos");
     }
 
     private async Task HandleSubmit()
@@ -88,7 +89,7 @@ else
         }
     }
 
-    private Task StartEdit(TodoItem todo)
+    private void StartEdit(TodoItem todo)
     {
         currentTodo = new TodoItem
         {

@@ -19,6 +19,7 @@ This project was developed as a quick demo to showcase modern .NET web developme
 - **Backend**: .NET 8, C#, Entity Framework Core 8.0
 - **Database**: SQLite (lightweight, embedded—no server setup)
 - **Frontend**: Blazor Server (Razor components)
+- **Test**: Includes bUnit tests for component state and EF integration
 - **IDE**: Visual Studio Code (with C# extension)
 - **Tools**: .NET CLI for scaffolding and migrations
 

@@ -1,32 +1,46 @@
-# .NET Core
-bin/
-obj/
-*.user
-*.suo
-*.sln.docstates
-!.gitignore
-
-# User-specific files
-[Dd]ebug/
-[Dd]ebugPublic/
-[Rr]elease/
-[Rr]eleases/
-x64/
-x86/
-[Aa]rchive/
-[Oo]ut/
-[Ll]og/
-
-# Build Results
+# .NET
 **/bin/
 **/obj/
+**/.vs/
+**/.idea/
+**/*.user
+**/*.suo
+**/*.sln.docstates
 
-# SQLite DB (temp/local data)
-*.db
+# User-specific
+**/[Dd]ebug/
+**/[Dd]ebugPublic/
+**/[Rr]elease/
+**/[Rr]eleases/
+**/x64/
+**/x86/
+**/bld/
+**[Ww]eb[Bb]uild/
+**[Ww]ebsites/
+**/wsp/
+
+# .NET Build Outputs
+**/bin/
+**/obj/
+**/bin/Debug/
+**/bin/Release/
+**/bin/x64/
+**/bin/x86/
+**/packages/
+
+# Test Artifacts
+**/*.dll  # Ignores all DLLs in bin (safe for builds)
+**/*.pdb
+**/*.exe
+**/*.cache
+
+# SQLite
+**/*.db
+**/*.db-shm
+**/*.db-wal
 
 # VS Code
 .vscode/settings.json
-.vscode/launch.json
 
 # macOS
 .DS_Store
