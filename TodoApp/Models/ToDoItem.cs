@@ -4,11 +4,10 @@ namespace TodoApp.Models;
 
 public class TodoItem
 {
-    public int Id { get; set; }
+    [Key]
+    public int Id { get; set; }  // EF Core will auto-generate this as identity in PostgreSQL
 
-    [Required(ErrorMessage = "Title is required")]
-    [StringLength(200, ErrorMessage = "Title too long (max 200 chars)")]
-    public string? Title { get; set; } = string.Empty;
+    public string? Title { get; set; }  // Or string Title { get; set; } if non-nullable
 
-    public bool IsCompleted { get; set; }
+    public bool IsCompleted { get; set; }  // bool maps to boolean natively
 }

@@ -1,7 +1,6 @@
 using TodoApp.Components;
 using TodoApp.Data;  // ← Add this
 using Microsoft.EntityFrameworkCore;  // ← Add this
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -12,8 +11,8 @@ builder.Services.AddRazorComponents()
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=todos.db"));
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
 var app = builder.Build();
 

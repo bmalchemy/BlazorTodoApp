@@ -42,5 +42,11 @@
 # VS Code
 .vscode/settings.json
 
+# Blazor
+bin/
+obj/
+*.db
+Properties/launchSettings.json
+
 # macOS
 .DS_Store
