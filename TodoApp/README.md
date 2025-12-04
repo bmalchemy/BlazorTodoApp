@@ -4,7 +4,7 @@
 *(Placeholder: Add a screenshot of the running app showing the todo list with items added/toggled/deleted.)*
 
 ## Overview
-This is a simple, full-stack CRUD (Create, Read, Update, Delete) application built with **Blazor Server** in .NET 8. It demonstrates asynchronous data operations using **Entity Framework Core** with **SQLite** as the database. Users can add todos, mark them as complete, and delete them—data persists across sessions.
+This is a simple, full-stack CRUD (Create, Read, Update, Delete) application built with **Blazor Server** in .NET 8. It demonstrates asynchronous data operations using **Entity Framework Core** with **PostgreSQL** as the database. Users can add todos, mark them as complete, and delete them—data persists across sessions.
 
 Key Features:
 - Interactive form for adding new todos.
@@ -17,7 +17,7 @@ This project was developed as a quick demo to showcase modern .NET web developme
 
 ## Tech Stack
 - **Backend**: .NET 8, C#, Entity Framework Core 8.0
-- **Database**: SQLite (lightweight, embedded—no server setup)
+- **Database**: PostgreSQL (Postgres mac app running)
 - **Frontend**: Blazor Server (Razor components)
 - **Test**: Includes bUnit tests for component state and EF integration
 - **IDE**: Visual Studio Code (with C# extension)
@@ -52,6 +52,11 @@ This project was developed as a quick demo to showcase modern .NET web developme
    ```
    - This creates the `todos.db` file in the project root.
 
+5. **Download and install Postgres App (v2.9.2)
+
+## Running PostgreSQL App
+- Open the app and start the server (PostgreSQL 18)
+
 ## Running the App
 ```bash
 dotnet build
@@ -79,17 +84,16 @@ TodoApp/
 1. Enter a title (e.g., "Buy groceries") and click **Add**.
 2. Check the box to mark complete—strikes through the text.
 3. Click **Delete** to remove.
+4. Click **Edit** to change the title.
 4. Refresh the page: Data persists!
 
 ## Potential Enhancements
-- Add Edit functionality (populate form on item click).
 - Validation with DataAnnotations (e.g., `[Required]` on Title).
 - Authentication (e.g., via Identity).
 - Deploy to Azure (swap SQLite for SQL Server).
 
 ## Notes
 - Built on macOS with VS Code—tested for compatibility.
-- For production, replace SQLite with a robust DB like PostgreSQL and add error handling.
 - Debug logs (Console.WriteLine) are included in code for troubleshooting; remove for release.
 
 ## License
